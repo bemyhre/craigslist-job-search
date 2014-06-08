@@ -1,0 +1,19 @@
+<%= form_for @search do |f| %>
+<ul id="search">
+  <li>
+    <%= f.text_field :search_name %>
+    <%= f.label :give_this_search_a_name %>
+  </li>
+  <li>
+    <%= f.text_field :string_of_terms %>
+    <%= f.label :whats_the_search_phrase %>
+  </li>
+  <li>
+    <%= f.text_field :cities %>
+    <%= f.label :what_city_or_cities %>
+  </li>
+  <li>
+    <%= f.submit "Submit Job Search" %>
+  </li>
+</ul>
+<% end %>
