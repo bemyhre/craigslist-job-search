@@ -3,11 +3,12 @@ require 'nokogiri'
 
 class Search < ActiveRecord::Base
 	attr_accessible :search_name, :string_of_terms, :cities
-	attr_accessor :job_master_list
+	attr_accessor :job_master_list, :string_of_terms
 	has_many :listings
 
 
 	def execute_search(string_of_terms, string_of_cities)
+		@string_of_terms = string_of_terms
 		@job_master={}
 		time = identify_time
 		cities = parse_out_cities(string_of_cities)
@@ -18,7 +19,7 @@ class Search < ActiveRecord::Base
 		end
 		remove_existing_listings
 		merge_posting_dates
-		#insert_into_listings
+		insert_into_listings
 	end
 
 	def parse_page_details(page, city)
@@ -32,21 +33,24 @@ class Search < ActiveRecord::Base
 	def merge_posting_dates  #aaahhh don't like this mess.
 		@job_master.each do |key,value|
 			listing_page=Nokogiri::HTML(open(value[:url])).css("p")
-			#setter=""
 			for element in listing_page
 				time_element = element.css('time').text
 	      		if time_element!=""&&(time_element>identify_time.to_s)
 		      	 	post_time =Time.parse(element.css('time').text)
-	  	    	 	puts post_time
-	  	    	 	puts key
+		      	 	value.merge!(post_time: post_time)
       			end
   			end
 		end
 	end
 
 	def insert_into_listings
-		@job_master.each do |listing|
-			#Listing.new
+		@job_master.each do |key,value|
+			x=Listing.new
+			x.listing_id = key
+			x.title = value[:text]
+			x.url = value[:url]
+			x.save
+			puts x
 		end
 	end
 
