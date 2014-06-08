@@ -1,1 +1,9 @@
-<h1>Welcome to Craiglist Job Search!</h1>
+
+<h2>Listings</h2>
+<ul>
+  <% @listings.each do |listing| %>
+    <li>
+      <%= link_to listing.title, listing_path(listing)%><br>
+    </li>
+  <% end %>
+</ul>
