@@ -1,3 +1,3 @@
-class Listing < ActiveRecord::Base
-	has_many :searches
+class Search < ActiveRecord::Base
+	has_many :listings
 end

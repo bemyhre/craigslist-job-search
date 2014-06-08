@@ -11,13 +11,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-
 ActiveRecord::Schema.define(:version => 3) do
-
 
   create_table "listings", :force => true do |t|
     t.string   "listing_id"
     t.string   "title"
+    t.string   "url"
     t.integer  "search_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
@@ -25,10 +24,10 @@ ActiveRecord::Schema.define(:version => 3) do
 
   create_table "searches", :force => true do |t|
     t.string   "search_name"
-    t.string   "string"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.string   "string_of_terms"
+    t.string   "cities"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
   end
-
 
 end
