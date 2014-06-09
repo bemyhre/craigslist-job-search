@@ -19,6 +19,7 @@ class Search < ActiveRecord::Base
 		end
 		remove_existing_listings
 		merge_posting_dates
+		remove_nil_listings
 		insert_into_listings
 	end
 
@@ -35,22 +36,30 @@ class Search < ActiveRecord::Base
 			listing_page=Nokogiri::HTML(open(value[:url])).css("p")
 			for element in listing_page
 				time_element = element.css('time').text
-	      		if time_element!=""&&(time_element>identify_time.to_s)
-		      	 	post_time =Time.parse(element.css('time').text)
-		      	 	value.merge!(post_time: post_time)
+	      		if time_element!=""&&(time_element.to_datetime>identify_time)
+		      	 	post_time =Time.parse(element.css('time').text).to_datetime
+		      	 	@job_master[key].merge!(post_time: post_time)
       			end
   			end
 		end
 	end
 
+	def remove_nil_listings
+		@job_master.delete_if do |key,value|
+			value[:post_time]==nil
+		end
+	end
+
 	def insert_into_listings
 		@job_master.each do |key,value|
+			puts value[:post_time]
 			x=Listing.new
 			x.listing_id = key
 			x.title = value[:text]
 			x.url = value[:url]
+			x.city =value[:location]
+			x.posted_date = value[:post_time]
 			x.save
-			puts x
 		end
 	end
 
@@ -62,7 +71,7 @@ class Search < ActiveRecord::Base
 	end
 
 	def identify_time
-		Time.now-100000
+		(Time.now-5000).to_datetime
 	end
 
 	def parse_out_cities(string)
