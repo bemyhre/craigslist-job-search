@@ -19,6 +19,7 @@ class Search < ActiveRecord::Base
 		end
 		remove_existing_listings
 		merge_posting_dates
+		remove_nil_listings
 		insert_into_listings
 	end
 
@@ -43,6 +44,12 @@ class Search < ActiveRecord::Base
 		end
 	end
 
+	def remove_nil_listings
+		@job_master.delete_if do |key,value|
+			value[:post_time]==nil
+		end
+	end
+
 	def insert_into_listings
 		@job_master.each do |key,value|
 			puts value[:post_time]
@@ -64,7 +71,7 @@ class Search < ActiveRecord::Base
 	end
 
 	def identify_time
-		(Time.now-6200).to_datetime
+		(Time.now-5000).to_datetime
 	end
 
 	def parse_out_cities(string)
