@@ -3,7 +3,9 @@
 <ul>
   <% @listings.each do |listing| %>
     <li>
-      <%= link_to listing.title, listing_path(listing)%><br>
+      <%= link_to listing.title, listing.url, :target => "_blank" %>
+      <%= listing.city %>
+      <%= listing.posted_date%>
     </li>
   <% end %>
 </ul>

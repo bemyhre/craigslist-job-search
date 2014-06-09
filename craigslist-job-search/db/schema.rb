@@ -17,9 +17,11 @@ ActiveRecord::Schema.define(:version => 3) do
     t.string   "listing_id"
     t.string   "title"
     t.string   "url"
+    t.string   "city"
+    t.datetime "posted_date"
     t.integer  "search_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "searches", :force => true do |t|
